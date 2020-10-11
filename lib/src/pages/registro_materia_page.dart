@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:parcialmovil1/src/blocs/provider.dart';
-import 'package:parcialmovil1/src/widgets/menu_widget.dart';
+import 'package:parcialmovil1/src/models/models.dart';
+import 'package:parcialmovil1/src/pages/home_page.dart';
+import 'package:parcialmovil1/src/pages/registro_notas_page.dart';
+import 'package:parcialmovil1/src/providers/db_provider.dart';
 
 class RegistroMateria extends StatefulWidget {
 
@@ -13,6 +16,7 @@ class _RegistroMateriaState extends State<RegistroMateria> {
 
   String codigo = '';
   String nombre = '';
+  List<Corte> _cortes;
 
   @override
   Widget build(BuildContext context) {
@@ -20,23 +24,30 @@ class _RegistroMateriaState extends State<RegistroMateria> {
       appBar: AppBar(
         title: Text('Registro De Materias'),
       ),
-      drawer: MenuWidget(),
       body: Container(
         padding: EdgeInsets.symmetric( horizontal: 10.0, vertical: 30.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                _crearCodigo( context ),
-                _crearNombre(),
-              ],
-            ),
-            _crearBoton()
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  _crearCodigo( context ),
+                  _crearNombre(),
+                ],
+              ),
+              Container(
+                height: 558.0,
+                child: RegistroNotas(cortes: asignarNota,)
+              ),
+              _crearBotones()
+            ],
+          ),
         )
       ),
     );
   }
+
+  asignarNota( List<Corte> cortes ) => _cortes = cortes;
 
   Widget _crearCodigo( BuildContext context ) {
 
@@ -81,25 +92,62 @@ class _RegistroMateriaState extends State<RegistroMateria> {
     );
   }
 
-  Widget _crearBoton() {
-
-    final size = MediaQuery.of(context).size;
+  Widget _crearBotones() {
 
     return Container(
-      padding: EdgeInsets.only( top: 15.0 ),
-      child: RaisedButton(
-        child: Container(
-          padding: EdgeInsets.symmetric( horizontal: size.width * 0.35, vertical: 15.0 ),
-          child: Text('Agregar'),
-        ),
-        elevation: 10.0,
-        color: Theme.of(context).primaryColor,
-        textColor: Colors.white,
-        onPressed: (){
-          print({codigo});
-          print({nombre});
-        },
+      padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            child: RaisedButton(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 35.0),
+                child: Text('Cancelar'),
+              ),
+              elevation: 10.0,
+              color: Colors.red,
+              textColor: Colors.white,
+              onPressed: () => Navigator.pushReplacementNamed(context, HomePage.routeName)
+            ),
+          ),
+          Container(
+            child: RaisedButton(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 35.0),
+                child: Text('Finalizar'),
+              ),
+              elevation: 10.0,
+              color: Colors.green,
+              textColor: Colors.white,
+              onPressed: (){
+
+                final materia = _calcularDefinitiva();
+                materia.nombre = nombre;
+                materia.codigo = codigo;
+                DBProvider.db.nuevaMateria(materia);
+                Navigator.pushReplacementNamed(context, HomePage.routeName);
+
+              },
+            ),
+          )
+        ],
       ),
     );
+  }
+
+  Materia _calcularDefinitiva(){
+    final materia = Materia();
+    _cortes.forEach((element) {
+      if ( element.numero == 1 ) {
+        materia.corte1 = element.total * 0.3;
+      } else if ( element.numero == 2 ){
+        materia.corte2 = element.total * 0.3;
+      } else {
+        materia.corte3 = element.total * 0.4;
+      }
+    });
+    materia.nota = materia.corte1 + materia.corte2 + materia.corte3;
+    return materia;
   }
 }
