@@ -9,7 +9,7 @@ class Materia {
     Materia({
         this.codigo,
         this.nombre,
-        this.nota,
+        this.nota = 0.0,
         this.corte1,
         this.corte2,
         this.corte3,
@@ -17,7 +17,7 @@ class Materia {
 
     String codigo;
     String nombre;
-    double nota;
+    double nota = 0.0;
     double corte1;
     double corte2;
     double corte3;
@@ -48,12 +48,12 @@ String corteToJson(Corte data) => json.encode(data.toJson());
 
 class Corte {
     Corte({
-        this.total,
+        this.total = 0.0,
         this.actividades,
         this.numero
     });
 
-    double total;
+    double total = 0.0;
     int numero;
     List<Actividad> actividades;
 
@@ -74,14 +74,14 @@ class Actividad {
     Actividad({
         this.nombre,
         this.porcentaje,
-        this.nota,
-        this.total
+        this.nota = 0.0,
+        this.total = 0.0
     });
 
     String nombre;
     double porcentaje;
-    double nota;
-    double total;
+    double nota = 0.0;
+    double total = 0.0;
 
     factory Actividad.fromJson(Map<String, dynamic> json) => Actividad(
         nombre: json["nombre"],

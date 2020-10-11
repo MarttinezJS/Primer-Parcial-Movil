@@ -3,14 +3,38 @@ import 'package:parcialmovil1/src/models/models.dart';
 import 'package:parcialmovil1/src/pages/registro_materia_page.dart';
 import 'package:parcialmovil1/src/providers/db_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
 
   static final routeName = 'home';
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Inicio'),
+        actions: [
+          Row(
+            children: [
+              RaisedButton(
+                onPressed: () {
+                  DBProvider.db.borrarTodos();
+                  setState(() {
+                    
+                  });
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular( 100.0 )
+                ),
+                child: Icon( Icons.delete , color: Theme.of(context).primaryColor, ),
+              )
+            ],
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, RegistroMateria.routeName),

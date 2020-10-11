@@ -103,7 +103,6 @@ class _RegistroNotasState extends State<RegistroNotas> with SingleTickerProvider
 
     final actividad = Actividad();
     corte1.numero = 1;
-    corte1.total = 0;
     corte1.actividades = [];
     
     return Column(
@@ -168,13 +167,15 @@ class _RegistroNotasState extends State<RegistroNotas> with SingleTickerProvider
           },
         ),
         Container(
-          child: ListView(
-            children: [
-              ListTile(
-                // title: ,
-              )
-            ],
-          )
+          height: 400.0,
+          child: ListView.builder(
+            itemCount: corte1.actividades.length,
+            itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              title: Text( corte1.actividades[index].nombre ),
+            );
+           },
+          ),
         )
       ],
     );
@@ -185,7 +186,6 @@ class _RegistroNotasState extends State<RegistroNotas> with SingleTickerProvider
 
      final actividad = Actividad();
     corte2.numero = 2;
-    corte2.total = 0;
     corte2.actividades = [];
     
     return Column(
@@ -255,9 +255,8 @@ class _RegistroNotasState extends State<RegistroNotas> with SingleTickerProvider
 
   Widget _corte3() {
 
-     final actividad = Actividad();
+    final actividad = Actividad();
     corte3.numero = 3;
-    corte3.total = 0;
     corte3.actividades = [];
     
     return Column(

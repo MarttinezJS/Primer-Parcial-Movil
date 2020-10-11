@@ -56,4 +56,10 @@ class DBProvider {
     return resp.isNotEmpty? resp.map((e) => Materia.fromJson(e)).toList() : [];
 
   }
+
+  borrarTodos() async {
+
+    final db = await database;
+    return await db.delete('materias');
+  }
 }
