@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parcialmovil1/src/pages/home_page.dart';
 import 'package:parcialmovil1/src/pages/registro_materia_page.dart';
 import 'package:parcialmovil1/src/pages/registro_notas_page.dart';
 
@@ -9,6 +10,11 @@ class MenuWidget extends StatelessWidget {
       child: ListView(
         children: [
           _crearCabecera(),
+          ListTile(
+            leading: Icon( Icons.home ),
+            title: Text('Inicio'),
+            onTap: () => Navigator.pushReplacementNamed(context, HomePage.routeName ),
+          ),
           ListTile(
             leading: Icon( Icons.add_circle_outline ),
             title: Text('Nueva Materia'),

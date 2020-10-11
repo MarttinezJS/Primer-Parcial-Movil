@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:parcialmovil1/src/models/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -38,6 +39,7 @@ class DBProvider {
           ' porcentaje FLOAT,'
           ' nota FLOAT,'
           ' total FLOAT,'
+          ' numero INT'
           ' fk_materia TEXT'
           ');'
           'CREATE TABLE actividades ('
@@ -46,10 +48,27 @@ class DBProvider {
           ' nota FLOAT,'
           ' total FLOAT,'
           ' nombre TEXT,'
-          ' fk_materia TEXT'
+          ' fk_cortes TEXT'
           ');'
+          'ATER TABLE cortes ADD CONSTRAINT fk_cortes_materias FOREIGN KEY(fk_materia) REFERENCES materias(codigo);'
+          'ATER TABLE actividades ADD CONSTRAINT fk_actividades_cortes FOREIGN KEY(fk_cortes) REFERENCES cortes(id);'
         );
       }
     );
+  }
+
+  nuevaMateria( Materia materia ) async {
+
+    final db = await database;
+    return await db.insert('materias', materia.toJson());
+  }
+
+  Future<List<Materia>> getMaterias() async {
+
+    final db = await database;
+    final resp = await db.query('materias');
+
+    return resp.isNotEmpty? resp.map((e) => Materia.fromJson(e)).toList() : [];
+
   }
 }
